@@ -13,7 +13,7 @@ function fizzbuzz(number) {
 
 // Implement the wrapper
 function main() {
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 30; i++) {
     console.log(fizzbuzz(i));
   }
 }
