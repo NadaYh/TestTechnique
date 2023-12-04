@@ -1,13 +1,17 @@
-// Implement factorial
+// app.js
+
 function factorial(number) {
-  return '0';
+  if (number === 0 || number === 1) {
+    return 1;
+  } else {
+    return number * factorial(number - 1);
+  }
 }
 
-// Implement the wrapper
 function main() {
-   for(let i=0; i<15;i++) {
-     console.log(factorial(i));
-   }
+  for (let i = 0; i <= 15; i++) {
+    console.log(factorial(i));
+  }
 }
 
 main();
