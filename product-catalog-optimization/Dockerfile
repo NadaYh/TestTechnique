@@ -17,7 +17,7 @@ COPY . .
 EXPOSE 3000
 
 # Define environment variable for MongoDB connection
-ENV MONGO_URI mongodb://mongo:27017/test-product-catalog
+ENV MONGO_URI mongodb://nada0809:213JFT0079@mongo:27017/test-product-catalog
 
 # Start the Node.js application
 CMD ["npm", "start"]
