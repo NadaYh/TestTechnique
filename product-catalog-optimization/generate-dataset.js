@@ -9,7 +9,7 @@ const { Metrics } = require('./helpers/metrics');
 const { Product } = require('./product');
 
 const DATABASE_NAME = 'test-product-catalog';
-const MONGO_URL = `mongodb://localhost:27017/${DATABASE_NAME}`;
+const MONGO_URL = `mongodb://0.0.0.0:27017/${DATABASE_NAME}`;
 const catalogUpdateFile = 'updated-catalog.csv';
 
 const { size } = minimist(process.argv.slice(2));
@@ -48,20 +48,28 @@ async function generateDataset(db, catalogSize) {
 
   const metrics = Metrics.zero();
   const createdAt = new Date();
+
+  // Utilisation d'un tableau pour stocker les produits
+  const products = [];
+
   for (let i = 0; i < catalogSize; i++) {
     const product = generateProduct(i, createdAt);
+    products.push(product);
 
-    // insert in initial dataset
-    await db.collection('Products').insertOne(product);
-
-    // insert in updated dataset (csv) with a tweak
-    const updatedProduct = generateUpdate(product, i, catalogSize);
-    metrics.merge(writeProductUpdateToCsv(product, updatedProduct));
-
-    const progressPercentage = i*100/catalogSize;
-    if ((progressPercentage)%10 === 0) {
+    const progressPercentage = (i + 1) * 100 / catalogSize; // Correction de l'indice
+    if (progressPercentage % 10 === 0) {
       console.debug(`[DEBUG] Processing ${progressPercentage}%...`);
     }
+  }
+
+  // Insertion de tous les produits en une seule opération
+  await db.collection('Products').insertMany(products);
+
+  // Traitement de chaque produit après l'insertion
+  for (let i = 0; i < catalogSize; i++) {
+    const product = products[i];
+    const updatedProduct = generateUpdate(product, i, catalogSize);
+    metrics.merge(writeProductUpdateToCsv(product, updatedProduct));
   }
 
   logMetrics(catalogSize, metrics);

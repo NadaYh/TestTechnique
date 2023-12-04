@@ -46,15 +46,17 @@ async function updateDataset(db) {
   }
 
   const products = dataRows.filter(dataRow => dataRow).map(row => Product.fromCsv(row));
-  await Promise.map(products, async (product, i) => {
-    const updateResult = await db.collection('Products')
-      .updateOne(
-        { _id: product._id },
-        { $set: product },
-        { upsert: true });
-    updateMetrics(updateResult);
-    logProgress(i);
-  });
+  //heree
+  const bulkOperations = products.map((product) => ({
+    updateOne: {
+      filter: { _id: product._id },
+      update: { $set: product },
+      upsert: true,
+    },
+  }));
+  
+  const bulkResult = await db.collection('Products').bulkWrite(bulkOperations);
+  updateMetrics(bulkResult);
 
   const dbIds = (await db.collection('Products').find({}, {_id: 1}).toArray()).map(o => o._id);
   const isDeletedId = id => !products.find(p => p._id === id);
