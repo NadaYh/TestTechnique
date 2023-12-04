@@ -1,0 +1,26 @@
+version: '3'
+services:
+  # MongoDB service
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+ 
+      MONGO_INITDB_DATABASE: test-product-catalog
+
+  # Node.js backend service
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nodejs-backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongo:27017/test-product-catalog
+    restart: always
