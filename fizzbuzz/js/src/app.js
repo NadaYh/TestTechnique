@@ -1,29 +1,36 @@
-// Implement fizzbuzz logic
-function fizzbuzz(number) {
-  if (number % 3 === 0 && number % 5 === 0) {
+// Implémenter la logique de FizzBuzz
+function fizzbuzz(nombre) {
+  // Vérifier si le nombre est divisible par 3 et 5
+  if (nombre % 3 === 0 && nombre % 5 === 0) {
     return 'fizzbuzz';
-  } else if (number % 3 === 0) {
+  } else if (nombre % 3 === 0) {
+    // Vérifier si le nombre est divisible par 3
     return 'fizz';
-  } else if (number % 5 === 0) {
+  } else if (nombre % 5 === 0) {
+    // Vérifier si le nombre est divisible par 5
     return 'buzz';
   } else {
-    return number.toString();
+    // Si le nombre n'est divisible ni par 3 ni par 5, retourner le nombre sous forme de chaîne de caractères
+    return nombre.toString();
   }
 }
 
-// Implement the wrapper
+// Implémenter le programme principal
 function main() {
-  // Get the command line argument (n)
+  // Récupérer l'argument de la ligne de commande (n)
   const n = process.argv[2];
 
-  // Validate if n is provided and is a positive integer
+  // Valider si n est fourni et est un entier positif
   if (!n || isNaN(n) || n <= 0 || !Number.isInteger(Number(n))) {
-    console.log("Please provide a valid positive integer as 'n'.");
+    // Afficher un message d'erreur si n n'est pas valide
+    console.log("Veuillez fournir un entier positif valide en tant que 'n'.");
   } else {
+    // Itérer de 1 à n et afficher le résultat de la fonction fizzbuzz pour chaque nombre
     for (let i = 1; i <= Number(n); i++) {
       console.log(fizzbuzz(i));
     }
   }
 }
 
+// Appeler la fonction principale pour exécuter la logique de FizzBuzz
 main();
